@@ -1,0 +1,20 @@
+[versions]
+awssdk = "2.31.50"
+boot = "3.3.1"
+funk = "0.10.0"
+spring = "6.2.7"
+spring-security = "6.4.5"
+
+[libraries]
+aws-beanstalk = { module = "software.amazon.awssdk:elasticbeanstalk", version.ref = "awssdk" }
+aws-crt = { module = "software.amazon.awssdk:aws-crt-client", version.ref = "awssdk" }
+funk-htmx = { module = "io.github.wakingrufus:spring-funk-htmx", version.ref = "funk" }
+funk-webmvc = { module = "io.github.wakingrufus:spring-funk-webmvc", version.ref = "funk" }
+spring-bom = { module = "org.springframework:spring-framework-bom", version.ref = "spring" }
+spring-boot-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "boot" }
+spring-boot-jetty = { module = "org.springframework.boot:spring-boot-starter-jetty", version.ref = "boot" }
+spring-boot-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "boot" }
+spring-boot-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "boot" }
+spring-security-config = { module = "org.springframework.security:spring-security-config", version.ref = "spring-security" }
+spring-security-test = { module = "org.springframework.security:spring-security-test", version.ref = "spring-security" }
+spring-security-web = { module = "org.springframework.security:spring-security-web", version.ref = "spring-security" }
