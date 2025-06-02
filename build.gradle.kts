@@ -11,6 +11,11 @@ tasks.wrapper {
 allprojects {
     group = "io.github.wakingrufus"
 }
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     subprojects.forEach {
         jacocoAggregation(project(":" + it.name))
