@@ -8,6 +8,7 @@ import com.github.wakingrufus.funk.htmx.htmx
 import com.github.wakingrufus.funk.htmx.hxGet
 import com.github.wakingrufus.funk.htmx.hxPushUrl
 import com.github.wakingrufus.funk.htmx.swap.HxSwapType
+import com.github.wakingrufus.funk.htmx.template.template
 import com.github.wakingrufus.funk.logging.logging
 import com.github.wakingrufus.funk.webmvc.webmvc
 import io.github.wakingrufus.elo.league.LeagueController
@@ -71,7 +72,7 @@ open class EloApplication : SpringFunkApplication {
                 get("/leagues", LeagueController::getAll, leagueListTemplate)
                 route(HttpVerb.POST, "/leagues", LeagueController::create) {
                     when (it) {
-                        is LeagueSuccessResponse -> leagueListItemTemplate.render(this, LeagueName(it.id, it.name))
+                        is LeagueSuccessResponse -> template(leagueListItemTemplate, LeagueName(it.id, it.name))
                         else -> li { +"Error" }
                     }
                 }
@@ -80,10 +81,10 @@ open class EloApplication : SpringFunkApplication {
                 route(HttpVerb.PUT, "/league/{id}", LeagueController::save, leagueDetailTemplate)
                 route(HttpVerb.GET, "/league/{id}/members", LeagueController::getMembers, leagueMemberListTemplate)
             }
-            page("/admin"){
+            page("/admin") {
                 initialLoad {
                     div {
-                        h1 { +"Users"}
+                        h1 { +"Users" }
                         div {
                             hxGet("/admin/users") {
                                 trigger {
