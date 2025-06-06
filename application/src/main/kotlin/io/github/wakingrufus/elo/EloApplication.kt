@@ -57,45 +57,41 @@ open class EloApplication : SpringFunkApplication {
         }
         htmx {
             page("/index") {
-                initialLoad {
-                    div {
-                        button {
-                            hxGet("/leagues") {
-                                swap(HxSwapType.OuterHtml)
-                                hxPushUrl(true)
-                            }
-                            +"View All Leagues"
+                div {
+                    button {
+                        hxGet("/leagues") {
+                            swap(HxSwapType.OuterHtml)
+                            hxPushUrl(true)
                         }
+                        +"View All Leagues"
                     }
                 }
+            }
+            get("/leagues", LeagueController::getAll, leagueListTemplate)
+            route(HttpVerb.POST, "/leagues", LeagueController::create) {
+                when (it) {
+                    is LeagueSuccessResponse -> template(leagueListItemTemplate, LeagueName(it.id, it.name))
+                    else -> li { +"Error" }
+                }
+            }
+            route(HttpVerb.GET, "/league/{id}", LeagueController::getById, leagueDetailTemplate)
+            route(HttpVerb.GET, "/league/{id}/edit", LeagueController::getById, leagueEditTemplate)
+            route(HttpVerb.PUT, "/league/{id}", LeagueController::save, leagueDetailTemplate)
+            route(HttpVerb.GET, "/league/{id}/members", LeagueController::getMembers, leagueMemberListTemplate)
 
-                get("/leagues", LeagueController::getAll, leagueListTemplate)
-                route(HttpVerb.POST, "/leagues", LeagueController::create) {
-                    when (it) {
-                        is LeagueSuccessResponse -> template(leagueListItemTemplate, LeagueName(it.id, it.name))
-                        else -> li { +"Error" }
-                    }
-                }
-                route(HttpVerb.GET, "/league/{id}", LeagueController::getById, leagueDetailTemplate)
-                route(HttpVerb.GET, "/league/{id}/edit", LeagueController::getById, leagueEditTemplate)
-                route(HttpVerb.PUT, "/league/{id}", LeagueController::save, leagueDetailTemplate)
-                route(HttpVerb.GET, "/league/{id}/members", LeagueController::getMembers, leagueMemberListTemplate)
-            }
             page("/admin") {
-                initialLoad {
+                div {
+                    h1 { +"Users" }
                     div {
-                        h1 { +"Users" }
-                        div {
-                            hxGet("/admin/users") {
-                                trigger {
-                                    load()
-                                }
+                        hxGet("/admin/users") {
+                            trigger {
+                                load()
                             }
                         }
                     }
                 }
-                get("/admin/users", UserController::getAll, userListTemplate)
             }
+            get("/admin/users", UserController::getAll, userListTemplate)
         }
         webmvc {
             enableWebMvc {
