@@ -23,7 +23,10 @@ import io.github.wakingrufus.elo.league.leagueMemberListTemplate
 import io.github.wakingrufus.elo.security.security
 import io.github.wakingrufus.elo.user.UserController
 import io.github.wakingrufus.elo.user.UserPersistence
+import io.github.wakingrufus.elo.user.UserSuccess
+import io.github.wakingrufus.elo.user.userListItemTemplate
 import io.github.wakingrufus.elo.user.userListTemplate
+import kotlinx.html.a
 import kotlinx.html.button
 import kotlinx.html.div
 import kotlinx.html.h1
@@ -66,6 +69,9 @@ open class EloApplication : SpringFunkApplication {
                         +"View All Leagues"
                     }
                 }
+                div {
+                    a(href = "/admin") {+"Admin"}
+                }
             }
             get("/leagues", LeagueController::getAll, leagueListTemplate)
             route(HttpVerb.POST, "/leagues", LeagueController::create) {
@@ -92,6 +98,12 @@ open class EloApplication : SpringFunkApplication {
                 }
             }
             get("/admin/users", UserController::getAll, userListTemplate)
+            route(HttpVerb.POST, "/admin/users", UserController::create) {
+                when (it) {
+                    is UserSuccess -> template(userListItemTemplate, it.user)
+                    else -> li { +"Error" }
+                }
+            }
         }
         webmvc {
             enableWebMvc {
